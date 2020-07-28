@@ -10,6 +10,24 @@ static char _colorNames[][] = {"{NORMAL}", "{DARK_RED}",    "{PINK}",      "{GRE
 static char _colorCodes[][] = {"\x01", "\x02", "\x03", "\x04", "\x05", "\x06",
                                "\x07", "\x08", "\x09", "\x0B", "\x0C", "\x0E"};
 
+/**
+ * display vote menu to player which in ct and t team
+ */
+stock void VoteMenuToMatchPlayer(Menu menu, int time)
+{
+  int clients[MAXPLAYERS + 1];
+  int count = 0;
+  
+  for (int i = 1; i < MaxClients; i++)
+  {
+    if (!IsPlayer(i) || (GetClientTeam(i) != CS_TEAM_T && GetClientTeam(i) != CS_TEAM_CT)) continue;
+
+    clients[count++] = i;
+  }
+
+  menu.DisplayVote(clients, count, time);
+}
+
 stock void AddMenuOption(Menu menu, const char[] info, const char[] display, any:...) {
   char formattedDisplay[128];
   VFormat(formattedDisplay, sizeof(formattedDisplay), display, 4);
@@ -234,16 +252,6 @@ stock bool InWarmup() {
   return GameRules_GetProp("m_bWarmupPeriod") != 0;
 }
 
-stock void EnsurePausedWarmup() {
-  if (!InWarmup()) {
-    StartWarmup();
-  }
-
-  ServerCommand("mp_warmup_pausetimer 1");
-  ServerCommand("mp_do_warmup_period 1");
-  ServerCommand("mp_warmup_pausetimer 1");
-}
-
 stock void StartWarmup(bool indefiniteWarmup = true, int warmupTime = 60) {
   ServerCommand("mp_do_warmup_period 1");
   ServerCommand("mp_warmuptime %d", warmupTime);
@@ -386,6 +394,13 @@ stock void ReplaceStringWithColoredInt(char[] buffer, int len, const char[] repl
                                        const char[] color, bool caseSensitive = false) {
   char intString[MAX_INTEGER_STRING_LENGTH + 32];
   Format(intString, sizeof(intString), "{%s}%d{NORMAL}", color, value);
+  ReplaceString(buffer, len, replace, intString, caseSensitive);
+}
+
+stock void ReplaceStringWithColored(char[] buffer, int len, const char[] replace, const char[] value,
+                                       const char[] color, bool caseSensitive = false) {
+  char intString[MAX_INTEGER_STRING_LENGTH + 32];
+  Format(intString, sizeof(intString), "{%s}%s{NORMAL}", color, value);
   ReplaceString(buffer, len, replace, intString, caseSensitive);
 }
 

@@ -18,10 +18,12 @@ public int Native_Message(Handle plugin, int numParams) {
   FormatNativeString(0, 2, 3, sizeof(buffer), bytesWritten, buffer);
 
   char finalMsg[1024];
-  if (StrEqual(g_Config.MESSAGE_PREFIX, ""))
+  char prefix[128];
+  g_MessagePrefix.GetString(prefix, sizeof(prefix));
+  if (StrEqual(prefix, ""))
     Format(finalMsg, sizeof(finalMsg), " %s", buffer);
   else
-    Format(finalMsg, sizeof(finalMsg), "%s %s", g_Config.MESSAGE_PREFIX, buffer);
+    Format(finalMsg, sizeof(finalMsg), "%s %s", prefix, buffer);
 
   if (client == 0) {
     Colorize(finalMsg, sizeof(finalMsg), false);
@@ -44,10 +46,12 @@ public int Native_MessageToAll(Handle plugin, int numParams) {
     FormatNativeString(0, 1, 2, sizeof(buffer), bytesWritten, buffer);
 
     char finalMsg[1024];
-    if (StrEqual(g_Config.MESSAGE_PREFIX, ""))
+    char prefix[128];
+    g_MessagePrefix.GetString(prefix, sizeof(prefix));
+    if (StrEqual(prefix, ""))
       Format(finalMsg, sizeof(finalMsg), " %s", buffer);
     else
-      Format(finalMsg, sizeof(finalMsg), "%s %s", g_Config.MESSAGE_PREFIX, buffer);
+      Format(finalMsg, sizeof(finalMsg), "%s %s", prefix, buffer);
 
     if (i != 0) {
       Colorize(finalMsg, sizeof(finalMsg));

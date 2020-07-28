@@ -4,11 +4,15 @@
 #define _c5_included
 
 
-enum struct C5_CONFIG{
-	char MESSAGE_PREFIX[128];
-	char VIP_PREFIX[128];
-	char OP_PREFIX[128];
+enum C5Config{
+	C5Config_MessagePrefix,
+	C5Config_VipPrefix,
+	C5Config_OpPrefix,
 }
+/**
+ * Called when a client is put in server after loading data
+ */
+forward void C5_OnClientDataLoad(int client, bool isVip);
 
 // Prints a plugin-formatted message to a client.
 native void C5_Message(int client, const char[] format, any:...);

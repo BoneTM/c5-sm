@@ -1,0 +1,6 @@
+﻿scripting/spcomp.exe
+plugins
+scripting/.vscode
+scripting/include/json
+scripting/include/bitbuffer.inc
+scripting/include
