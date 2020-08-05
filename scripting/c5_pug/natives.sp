@@ -27,6 +27,7 @@ public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max
   CreateNative("C5_PUG_GetMapType", Native_GetMapType);
   CreateNative("C5_PUG_GetGameState", Native_GetGameState);
   CreateNative("C5_PUG_IsMatchLive", Native_IsMatchLive);
+  CreateNative("C5_PUG_IsPendingStart", Native_IsPendingStart);
   CreateNative("C5_PUG_IsWarmup", Native_IsWarmup);
   CreateNative("C5_PUG_SetLeader", Native_SetLeader);
   CreateNative("C5_PUG_GetLeader", Native_GetLeader);
@@ -182,6 +183,10 @@ public int Native_GetGameState(Handle plugin, int numParams) {
 
 public int Native_IsMatchLive(Handle plugin, int numParams) {
   return g_GameState == GameState_Live;
+}
+
+public int Native_IsPendingStart(Handle plugin, int numParams) {
+  return g_GameState >= GameState_PickingPlayers && g_GameState <= GameState_GoingLive;
 }
 
 public int Native_IsWarmup(Handle plugin, int numParams) {

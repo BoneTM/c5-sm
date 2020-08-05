@@ -253,6 +253,9 @@ native GameState C5_PUG_GetGameState();
 native bool C5_PUG_IsMatchLive();
 
 // Returns if the match is pending start. (e.g. during the lo3)
+native bool C5_PUG_IsPendingStart();
+
+// Returns if the match is in warmup.
 native bool C5_PUG_IsWarmup();
 
 // Sets the pug leader.
@@ -337,6 +340,7 @@ public __pl_c5_pug_SetNTVOptional() {
   MarkNativeAsOptional("C5_PUG_GetMapType");
   MarkNativeAsOptional("C5_PUG_GetGameState");
   MarkNativeAsOptional("C5_PUG_IsMatchLive");
+  MarkNativeAsOptional("C5_PUG_IsPendingStart");
   MarkNativeAsOptional("C5_PUG_IsWarmup");
   MarkNativeAsOptional("C5_PUG_SetLeader");
   MarkNativeAsOptional("C5_PUG_GetLeader");

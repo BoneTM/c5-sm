@@ -36,6 +36,8 @@ ConVar g_ForceDefaultsCvar;
 ConVar g_LiveCfgCvar;
 ConVar g_MapVoteTimeCvar;
 ConVar g_MutualUnpauseCvar;
+ConVar g_PauseCountLimitCvar;
+ConVar g_PauseTimeCvar;
 ConVar g_PausingEnabledCvar;
 ConVar g_PostGameCfgCvar;
 ConVar g_RandomizeMapOrderCvar;
@@ -90,6 +92,7 @@ int g_LastReadyHintTime = 0;
 /** Pause information **/
 bool g_ctUnpaused = false;
 bool g_tUnpaused = false;
+int g_PauseCount[4];
 
 /** Chat aliases loaded **/
 ArrayList g_ChatAliases;
@@ -165,6 +168,7 @@ Handle g_hOnWarmupCfg = INVALID_HANDLE;
 #include "c5_pug/friendlyfirevote.sp"
 #include "c5_pug/overtime.sp"
 #include "c5_pug/natives.sp"
+#include "c5_pug/pause.sp"
 #include "c5_pug/setupmenus.sp"
 
 /***********************
@@ -224,6 +228,10 @@ public void OnPluginStart() {
   g_MutualUnpauseCvar = CreateConVar(
       "sm_c5_pug_mutual_unpausing", "1",
       "Whether an unpause command requires someone from both teams to fully unpause the match. Note that this forces the pause/unpause commands to be unrestricted (so anyone can use them).");
+  g_PauseCountLimitCvar = CreateConVar(
+      "sm_c5_pug_pause_count_limit", "2", "");
+  g_PauseTimeCvar = CreateConVar(
+      "sm_c5_pug_pause_time", "120", "");
   g_PausingEnabledCvar =
       CreateConVar("sm_c5_pug_pausing_enabled", "1", "Whether pausing is allowed.");
   g_PostGameCfgCvar =
@@ -238,7 +246,7 @@ public void OnPluginStart() {
   g_SetupEnabledCvar = CreateConVar("sm_c5_pug_setup_enabled", "1",
                                     "Whether the sm_setup commands are enabled");
   g_SnakeCaptainsCvar = CreateConVar(
-      "sm_c5_pug_snake_captain_picks", "2",
+      "sm_c5_pug_snake_captain_picks", "1",
       "If set to 0: captains pick players in a ABABABAB order. If set to 1, in a ABBAABBA order. If set to 2, in a ABBABABA order. If set to 3, in a ABBABAAB order.");
   g_StartDelayCvar =
       CreateConVar("sm_c5_pug_start_delay", "5",
@@ -354,40 +362,11 @@ public void OnPluginStart() {
   
   g_auths = new ArrayList(64);
 
-
-  for (int i = 0; i < MaxClients; i++)
+  // hook for friendlyfire
+  for (int i = 1; i <= MaxClients; i++)
   {
-    if (!IsValidClient(i)) continue;
-
-    SDKHook(i, SDKHook_OnTakeDamage, Hook_OnTakeDamage);
+      HookOnTakeDamage(i);
   }
-}
-
-public void OnClientPutInServer(int client)
-{
-    if (!IsValidClient(client)) return;
-
-    SDKHook(client, SDKHook_OnTakeDamage, Hook_OnTakeDamage);
-}
-
-public Action Hook_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3])
-{
-  if (!g_EnableFriendlyFire)
-  {
-    if (attacker < 1 || attacker > MaxClients || attacker == victim || weapon < 1)
-    {
-      return Plugin_Continue;
-    }
-    
-    if (GetClientTeam(victim) == GetClientTeam(attacker))
-    {
-      return Plugin_Handled;
-    }
-    
-    return Plugin_Continue;
-  }
-
-  return Plugin_Continue;
 }
 
 static void AddPugSetupCommand(const char[] command, ConCmd callback, const char[] description,
@@ -1042,18 +1021,44 @@ public Action Command_Pause(int client, int args) {
   if (g_MutualUnpauseCvar.IntValue != 0) {
     C5_PUG_SetPermissions("sm_pause", Permission_All);
   }
-
+  
   if (!DoPermissionCheck(client, "sm_pause")) {
     if (IsValidClient(client))
       C5_Message(client, "%t", "NoPermission");
     return Plugin_Handled;
   }
-
+  
   g_ctUnpaused = false;
   g_tUnpaused = false;
+
+  int team = GetClientTeam(client);
+  if (g_PauseCountLimitCvar.IntValue > 0)
+  {
+    if (g_PauseCount[team] <= 0)
+    {
+      C5_Message(client, "你们已经没有暂停的机会啦!");
+      return Plugin_Handled;
+    }
+    else
+    {
+      g_PauseCount[team]--;
+    }
+  }
+
+  if (g_PauseTimeCvar.IntValue > 0)
+  {
+    StartPauseCountDown();
+  }
   Pause();
   if (IsPlayer(client)) {
-    C5_MessageToAll("%t", "Pause", client);
+    if (g_PauseCountLimitCvar.IntValue > 0)
+    {
+      C5_MessageToAll("%t, 该队伍还剩%d次暂停机会", "Pause", client, g_PauseCount[team]);
+    }
+    else
+    {
+      C5_MessageToAll("%t", "Pause", client);
+    }
   }
 
   return Plugin_Handled;
@@ -1087,6 +1092,7 @@ public Action Command_Unpause(int client, int args) {
   } else {
     // Let console force unpause
     if (client == 0) {
+      StopPauseCountDown();
       Unpause();
     } else {
       int team = GetClientTeam(client);
@@ -1096,6 +1102,7 @@ public Action Command_Unpause(int client, int args) {
         g_ctUnpaused = true;
 
       if (g_tUnpaused && g_ctUnpaused) {
+        StopPauseCountDown();
         Unpause();
         if (IsPlayer(client)) {
           C5_MessageToAll("%t", "Unpause", client);
@@ -1494,6 +1501,9 @@ public void StartGame() {
 }
 
 public Action Timer_BeginMatch(Handle timer) {
+  // clear pause count
+  ResetPauseCount();
+
   if (g_DoKnifeRound) {
     ChangeState(GameState_KnifeRound);
     CreateTimer(3.0, StartKnifeRound, _, TIMER_FLAG_NO_MAPCHANGE);

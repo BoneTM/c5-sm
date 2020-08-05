@@ -66,3 +66,45 @@ void DisplayFriendlyFireVoteMenu()
 
   VoteMenuToMatchPlayer(menu, 10);
 }
+
+public Action Hook_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3])
+{
+  if (!g_EnableFriendlyFire)
+  {
+    if (IsValidClient(attacker) || attacker == victim || weapon < 1)
+    {
+      return Plugin_Continue;
+    }
+    
+    if (GetClientTeam(victim) == GetClientTeam(attacker))
+    {
+      return Plugin_Handled;
+    }
+    
+    return Plugin_Continue;
+  }
+
+  return Plugin_Continue;
+}
+
+public void OnClientDisconnect(int client)
+{
+  UnHookOnTakeDamage(client);
+}
+
+public void OnClientPutInServer(int client)
+{
+  HookOnTakeDamage(client);
+}
+
+void HookOnTakeDamage(int client)
+{
+  if (!IsValidClient(client)) return;
+  SDKHook(client, SDKHook_OnTakeDamage, Hook_OnTakeDamage);
+}
+
+void UnHookOnTakeDamage(int client)
+{
+  if (!IsValidClient(client)) return;
+  SDKUnhook(client, SDKHook_OnTakeDamage, Hook_OnTakeDamage);
+}

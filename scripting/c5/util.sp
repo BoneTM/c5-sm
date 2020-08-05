@@ -34,6 +34,19 @@ stock void AddMenuOption(Menu menu, const char[] info, const char[] display, any
   menu.AddItem(info, formattedDisplay);
 }
 
+stock void AddMenuOptionIsEnable(Menu menu, bool isEnable, const char[] info, const char[] display, any:...) {
+  char formattedDisplay[128];
+  VFormat(formattedDisplay, sizeof(formattedDisplay), display, 4);
+  if (isEnable)
+  {
+    menu.AddItem(info, formattedDisplay);
+  }
+  else
+  {
+    menu.AddItem(info, formattedDisplay, ITEMDRAW_DISABLED);
+  }
+}
+
 /**
  * Adds an integer to a menu as a string choice.
  */
@@ -323,18 +336,6 @@ stock void SetConVarStringSafe(const char[] name, const char[] value) {
   } else {
     SetConVarString(cvar, value);
   }
-}
-
-stock void SetTeamInfo(int team, const char[] name, const char[] flag = "") {
-  int team_int = (team == CS_TEAM_CT) ? 1 : 2;
-
-  char teamCvarName[32];
-  char flagCvarName[32];
-  Format(teamCvarName, sizeof(teamCvarName), "mp_teamname_%d", team_int);
-  Format(flagCvarName, sizeof(flagCvarName), "mp_teamflag_%d", team_int);
-
-  SetConVarStringSafe(teamCvarName, name);
-  SetConVarStringSafe(flagCvarName, flag);
 }
 
 stock bool OnActiveTeam(int client) {

@@ -3,6 +3,7 @@
 
 #include "include/c5.inc"
 #include "include/c5_pug.inc"
+#include "include/c5_vip.inc"
 #include "c5/util.sp"
 
 #pragma semicolon 1
@@ -12,7 +13,7 @@ char g_tags[MAXPLAYERS + 1][30];
 
 public Plugin myinfo = 
 {
-    name = "C5: pug - tag",
+    name = "C5: PUG - tag",
     author = "Bone",
     description = "Name Tag",
     version = "1.0",
@@ -44,13 +45,13 @@ public void C5_OnClientDataLoad(int client, bool isVip)
 	char prefix[30];
 	if (isVip)
 	{
-		C5_GetConfig(C5Config_VipPrefix, prefix);
+		C5_GetVipPrefix(prefix, sizeof(prefix));
 		Format(g_tags[client], sizeof(g_tags[]), prefix);
 	}
 	
 	if (GetUserAdmin(client) != INVALID_ADMIN_ID)
 	{
-		C5_GetConfig(C5Config_OpPrefix, prefix);
+		C5_GetOpPrefix(prefix, sizeof(prefix));
 		Format(g_tags[client], sizeof(g_tags[]), prefix);
 	}
 }
