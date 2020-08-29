@@ -1,0 +1,20 @@
+vertexlitgeneric
+{
+	"$basetexture"              bone/gloves/fullfinger/immortalis/glove_fullfinger
+	"$envmap"                   env_cubemap
+	"$envmaptint"               "[ .01 .01 .02 ]"
+	"$basealphaphongmask"       1
+	"$normalmapalphaenvmapmask" 1
+	"$bumpmap"                  bone/gloves/fingerless/common/glove_fullfinger_normal
+	"$phongexponenttexture"     bone/gloves/fingerless/common/glove_fullfinger_exp
+	"$phong"                    1
+	"$phongboost"               2
+	"$phongalbedotint"          1
+	"$phongalbedoboost"         15
+	"$phongtint"                "[0.7 0.8 1]"
+	"$phongfresnelranges"       "[0.3 0.6 1]"
+	"$rimlight"                 1
+	"$rimlightexponent"         4
+	"$rimlightboost"            0.1
+	"$rimmask"                  1
+}

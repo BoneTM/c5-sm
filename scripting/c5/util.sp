@@ -28,15 +28,26 @@ stock void VoteMenuToMatchPlayer(Menu menu, int time)
   menu.DisplayVote(clients, count, time);
 }
 
+stock void AddMenuTitle(Menu menu, const char[] display, any:...) {
+  char formattedDisplay[128];
+  VFormat(formattedDisplay, sizeof(formattedDisplay), display, 3);
+  ReplaceString(formattedDisplay, sizeof(formattedDisplay), "&", " › ");
+  ReplaceString(formattedDisplay, sizeof(formattedDisplay), "||", "\n▉ ");
+  StrCat(formattedDisplay, sizeof(formattedDisplay), "\n ");
+  menu.SetTitle(formattedDisplay);
+}
+
 stock void AddMenuOption(Menu menu, const char[] info, const char[] display, any:...) {
   char formattedDisplay[128];
   VFormat(formattedDisplay, sizeof(formattedDisplay), display, 4);
+  ReplaceString(formattedDisplay, sizeof(formattedDisplay), "||", "\n  ▸ ");
   menu.AddItem(info, formattedDisplay);
 }
 
 stock void AddMenuOptionIsEnable(Menu menu, bool isEnable, const char[] info, const char[] display, any:...) {
   char formattedDisplay[128];
-  VFormat(formattedDisplay, sizeof(formattedDisplay), display, 4);
+  VFormat(formattedDisplay, sizeof(formattedDisplay), display, 5);
+  ReplaceString(formattedDisplay, sizeof(formattedDisplay), "||", "\n  ▸ ");
   if (isEnable)
   {
     menu.AddItem(info, formattedDisplay);
@@ -338,6 +349,15 @@ stock void SetConVarStringSafe(const char[] name, const char[] value) {
   }
 }
 
+stock void SetConVarIntSafe(const char[] name, const int value) {
+  Handle cvar = FindConVar(name);
+  if (cvar == INVALID_HANDLE) {
+    LogError("Failed to find cvar: \"%s\"", name);
+  } else {
+    SetConVarInt(cvar, value);
+  }
+}
+
 stock bool OnActiveTeam(int client) {
   if (!IsPlayer(client))
     return false;
@@ -488,4 +508,24 @@ stock void GetRandomCode(char[] output, int outputSize)
 	{
 		output[i] = choices[GetRandomInt(0, sizeof(choices) - 2)];
 	}
+}
+
+stock bool HelpfulAttack(int attacker, int victim) {
+  if (!IsValidClient(attacker) || !IsValidClient(victim)) {
+    return false;
+  }
+  int attackerTeam = GetClientTeam(attacker);
+  int victimTeam = GetClientTeam(victim);
+  return attackerTeam != victimTeam && attacker != victim;
+}
+
+stock bool GetAuth(int client, char[] auth, int size) {
+  if (client == 0)
+    return false;
+
+  bool ret = GetClientAuthId(client, AuthId_SteamID64, auth, size);
+  if (!ret) {
+    LogError("Failed to get steamid for client %L", client);
+  }
+  return ret;
 }

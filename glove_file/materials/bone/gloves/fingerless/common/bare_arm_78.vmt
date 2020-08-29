@@ -1,0 +1,19 @@
+character
+{
+	"$basetexture"            bone/gloves/fingerless/common/bare_arm_78
+ 	"$bumpmap"                bone/gloves/fingerless/common/bare_arm_55_normal
+	"$masks1"                 bone/gloves/fingerless/common/bare_arm_masks1
+	"$phongwarptexture"       bone/gloves/common/material_specwarp
+	"$fresnelrangestexture"   bone/gloves/fingerless/common/bare_arm_fresnelrange
+	"$basealphaenvmask"       1
+	"$rimlightboost"          1
+	"$rimlightexponent"       8
+	"$ambientreflectionboost" 1.0
+	"$shadowsaturation"       0.13
+	"$shadowsaturationbounds" "[0.25 0.5 0.5 0.7]"
+	"$phongboost"             1
+	"$envmap"                 "env_cubemap"
+	"$envmaplightscale"       0.5
+	"$shadowrimboost"			1
+
+}

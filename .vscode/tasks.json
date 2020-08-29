@@ -1,0 +1,17 @@
+{
+  // See https://go.microsoft.com/fwlink/?LinkId=733558
+  // for the documentation about the tasks.json format
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "spBuild",
+      "type": "shell",
+      "command": "D:\\csgo\\csgo\\addons\\sourcemod\\scripting\\spcomp",
+      "args": [
+        "${fileDirname}\\${fileBasenameNoExtension}.sp",
+        "-oD:\\csgo\\csgo\\addons\\sourcemod\\plugins\\${fileBasenameNoExtension}.smx"
+      ],
+      "problemMatcher": []
+    }
+  ]
+}
