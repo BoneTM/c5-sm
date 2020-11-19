@@ -6,10 +6,10 @@
     {
       "label": "spBuild",
       "type": "shell",
-      "command": "D:\\csgo\\csgo\\addons\\sourcemod\\scripting\\spcomp",
+      "command": "C:\\Users\\Bone\\Desktop\\sourcemod\\spcomp",
       "args": [
         "${fileDirname}\\${fileBasenameNoExtension}.sp",
-        "-oD:\\csgo\\csgo\\addons\\sourcemod\\plugins\\${fileBasenameNoExtension}.smx"
+        "-oC:\\Users\\Bone\\Desktop\\compiled\\${fileBasenameNoExtension}.smx"
       ],
       "problemMatcher": []
     }

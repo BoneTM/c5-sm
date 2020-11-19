@@ -9,8 +9,7 @@
 #include <cstrike>
 #include <clientprefs>
 #include "kento_rankme/rankme"
-#include "include/pugsetup.inc"
-#include "include/message.inc"
+#include "include/puger.inc"
 
 #pragma newdecls required
 #pragma dynamic 131072 
@@ -564,11 +563,11 @@ public Action Event_VipEscaped(Handle event, const char[] name, bool dontBroadca
 		return;
 	for (int i = 1; i <= MaxClients; i++)
 	if (IsClientInGame(i))
-		if(!hidechat[i]) Message(i, "%T", "CT_VIPEscaped", i, g_PointsVipEscapedTeam);
+		if(!hidechat[i]) Puger_Message(i, "%T", "CT_VIPEscaped", i, g_PointsVipEscapedTeam);
 	if (client != 0 && (g_bRankBots && !IsFakeClient(client)))
 		for (int i = 1; i <= MaxClients; i++)
 	if (IsClientInGame(i))
-		if(!hidechat[i]) Message(i, "%T", "VIPEscaped", i, g_aClientName[client], g_aStats[client].SCORE, g_PointsVipEscapedTeam + g_PointsVipEscapedPlayer);
+		if(!hidechat[i]) Puger_Message(i, "%T", "VIPEscaped", i, g_aClientName[client], g_aStats[client].SCORE, g_PointsVipEscapedTeam + g_PointsVipEscapedPlayer);
 }
 
 public Action Event_VipKilled(Handle event, const char[] name, bool dontBroadcast) {
@@ -597,11 +596,11 @@ public Action Event_VipKilled(Handle event, const char[] name, bool dontBroadcas
 		return;
 	for (int i = 1; i <= MaxClients; i++)
 	if (IsClientInGame(i))
-		if(!hidechat[i]) Message(i, "%T", "TR_VIPKilled", i, g_PointsVipKilledTeam);
+		if(!hidechat[i]) Puger_Message(i, "%T", "TR_VIPKilled", i, g_PointsVipKilledTeam);
 	if (client != 0 && (g_bRankBots && !IsFakeClient(client)))
 		for (int i = 1; i <= MaxClients; i++)
 	if (IsClientInGame(i))
-		if(!hidechat[i]) Message(i, "%T", "VIPKilled", i, g_aClientName[client], g_aStats[client].SCORE, g_PointsVipKilledTeam + g_PointsVipKilledPlayer);
+		if(!hidechat[i]) Puger_Message(i, "%T", "VIPKilled", i, g_aClientName[client], g_aStats[client].SCORE, g_PointsVipKilledTeam + g_PointsVipKilledPlayer);
 }
 
 public Action Event_HostageRescued(Handle event, const char[] name, bool dontBroadcast) {
@@ -629,12 +628,12 @@ public Action Event_HostageRescued(Handle event, const char[] name, bool dontBro
 	if (g_PointsHostageRescTeam > 0)
 		for (int i = 1; i <= MaxClients; i++)
 	if (IsClientInGame(i))
-		if(!hidechat[i]) Message(i, "%T", "CT_Hostage", i, g_PointsHostageRescTeam);
+		if(!hidechat[i]) Puger_Message(i, "%T", "CT_Hostage", i, g_PointsHostageRescTeam);
 	
 	if (g_PointsHostageRescPlayer > 0 && client != 0 && (g_bRankBots && !IsFakeClient(client)))
 		for (int i = 1; i <= MaxClients; i++)
 	if (IsClientInGame(i))
-		if(!hidechat[i]) Message(i, "%T", "Hostage", i, g_aClientName[client], g_aStats[client].SCORE, g_PointsHostageRescPlayer + g_PointsHostageRescTeam);
+		if(!hidechat[i]) Puger_Message(i, "%T", "Hostage", i, g_aClientName[client], g_aStats[client].SCORE, g_PointsHostageRescPlayer + g_PointsHostageRescTeam);
 	
 }
 
@@ -655,7 +654,7 @@ public Action Event_RoundMVP(Handle event, const char[] name, bool dontBroadcast
 			g_aSession[client].SCORE += g_PointsMvpTr;
 			for (int i = 1; i <= MaxClients; i++)
 			if (IsClientInGame(i))
-				if(!hidechat[i]) Message(i, "%T", "MVP", i, g_aClientName[client], g_aStats[client].SCORE, g_PointsMvpTr);
+				if(!hidechat[i]) Puger_Message(i, "%T", "MVP", i, g_aClientName[client], g_aStats[client].SCORE, g_PointsMvpTr);
 			
 		} else {
 			
@@ -663,7 +662,7 @@ public Action Event_RoundMVP(Handle event, const char[] name, bool dontBroadcast
 			g_aSession[client].SCORE += g_PointsMvpCt;
 			for (int i = 1; i <= MaxClients; i++)
 			if (IsClientInGame(i))
-				if(!hidechat[i]) Message(i, "%T", "MVP", i, g_aClientName[client], g_aStats[client].SCORE, g_PointsMvpCt);	
+				if(!hidechat[i]) Puger_Message(i, "%T", "MVP", i, g_aClientName[client], g_aStats[client].SCORE, g_PointsMvpCt);	
 		}
 	}
 	g_aStats[client].MVP++;
@@ -688,7 +687,7 @@ public Action Event_RoundEnd(Handle event, const char[] name, bool dontBroadcast
 						if (!announced && g_bChatChange) {
 							for (int j = 1; j <= MaxClients; j++)
 							if (IsClientInGame(j))
-								if(!hidechat[j]) Message(j, "%T", "TR_Round", j, g_PointsRoundWin[TR]);
+								if(!hidechat[j]) Puger_Message(j, "%T", "TR_Round", j, g_PointsRoundWin[TR]);
 						}
 					}
 				}
@@ -710,7 +709,7 @@ public Action Event_RoundEnd(Handle event, const char[] name, bool dontBroadcast
 						if (!announced && g_bChatChange) {
 							for (int j = 1; j <= MaxClients; j++)
 							if (IsClientInGame(j))
-								if(!hidechat[j]) Message(j, "%T", "CT_Round_Lose", j, g_PointsRoundLose[CT]);
+								if(!hidechat[j]) Puger_Message(j, "%T", "CT_Round_Lose", j, g_PointsRoundLose[CT]);
 						}
 						
 					}
@@ -726,7 +725,7 @@ public Action Event_RoundEnd(Handle event, const char[] name, bool dontBroadcast
 						if (!announced && g_bChatChange) {
 							for (int j = 1; j <= MaxClients; j++)
 							if (IsClientInGame(j))
-								if(!hidechat[j]) Message(j, "%T", "CT_Round", j, g_PointsRoundWin[CT]);
+								if(!hidechat[j]) Puger_Message(j, "%T", "CT_Round", j, g_PointsRoundWin[CT]);
 						}
 					}
 				}
@@ -748,7 +747,7 @@ public Action Event_RoundEnd(Handle event, const char[] name, bool dontBroadcast
 						if (!announced && g_bChatChange) {
 							for (int j = 1; j <= MaxClients; j++)
 							if (IsClientInGame(j))
-								if(!hidechat[j]) Message(j, "%T", "TR_Round_Lose", j, g_PointsRoundLose[TR]);
+								if(!hidechat[j]) Puger_Message(j, "%T", "TR_Round_Lose", j, g_PointsRoundLose[TR]);
 						}
 					}
 				}
@@ -834,11 +833,11 @@ public Action Event_BombPlanted(Handle event, const char[] name, bool dontBroadc
 	if (g_PointsBombPlantedTeam > 0)
 		for (int i = 1; i <= MaxClients; i++)
 	if (IsClientInGame(i))
-		if(!hidechat[i]) Message(i, "%T", "TR_Planting", i, g_PointsBombPlantedTeam);
+		if(!hidechat[i]) Puger_Message(i, "%T", "TR_Planting", i, g_PointsBombPlantedTeam);
 	if (g_PointsBombPlantedPlayer > 0 && client != 0 && (g_bRankBots || !IsFakeClient(client)))
 		for (int i = 1; i <= MaxClients; i++)
 	if (IsClientInGame(i))
-		if(!hidechat[i]) Message(i, "%T", "Planting", i, g_aClientName[client], g_aStats[client].SCORE, g_PointsBombPlantedTeam + g_PointsBombPlantedPlayer);
+		if(!hidechat[i]) Puger_Message(i, "%T", "Planting", i, g_aClientName[client], g_aStats[client].SCORE, g_PointsBombPlantedTeam + g_PointsBombPlantedPlayer);
 	
 }
 
@@ -867,11 +866,11 @@ public Action Event_BombDefused(Handle event, const char[] name, bool dontBroadc
 	if (g_PointsBombDefusedTeam > 0)
 		for (int i = 1; i <= MaxClients; i++)
 	if (IsClientInGame(i))
-		if(!hidechat[i]) Message(i, "%T", "CT_Defusing", i, g_PointsBombDefusedTeam);
+		if(!hidechat[i]) Puger_Message(i, "%T", "CT_Defusing", i, g_PointsBombDefusedTeam);
 	if (g_PointsBombDefusedPlayer > 0 && client != 0 && (g_bRankBots || !IsFakeClient(client)))
 		for (int i = 1; i <= MaxClients; i++)
 	if (IsClientInGame(i))
-		if(!hidechat[i]) Message(i, "%T", "Defusing", i, g_aClientName[client], g_aStats[client].SCORE, g_PointsBombDefusedTeam + g_PointsBombDefusedPlayer);
+		if(!hidechat[i]) Puger_Message(i, "%T", "Defusing", i, g_aClientName[client], g_aStats[client].SCORE, g_PointsBombDefusedTeam + g_PointsBombDefusedPlayer);
 }
 
 public Action Event_BombExploded(Handle event, const char[] name, bool dontBroadcast)
@@ -903,11 +902,11 @@ public Action Event_BombExploded(Handle event, const char[] name, bool dontBroad
 	if (g_PointsBombExplodeTeam > 0)
 		for (int i = 1; i <= MaxClients; i++)
 	if (IsClientInGame(i))
-		if(!hidechat[i]) Message(i, "%T", "TR_Exploding", i, g_PointsBombExplodeTeam);
+		if(!hidechat[i]) Puger_Message(i, "%T", "TR_Exploding", i, g_PointsBombExplodeTeam);
 	if (g_PointsBombExplodePlayer > 0 && client != 0 && (g_bRankBots || !IsFakeClient(client)))
 		for (int i = 1; i <= MaxClients; i++)
 	if (IsClientInGame(i))
-		if(!hidechat[i]) Message(i, "%T", "Exploding", i, g_sC4PlantedByName, g_aStats[client].SCORE, g_PointsBombExplodeTeam + g_PointsBombExplodePlayer);
+		if(!hidechat[i]) Puger_Message(i, "%T", "Exploding", i, g_sC4PlantedByName, g_aStats[client].SCORE, g_PointsBombExplodeTeam + g_PointsBombExplodePlayer);
 }
 
 public Action Event_BombPickup(Handle event, const char[] name, bool dontBroadcast)
@@ -923,7 +922,7 @@ public Action Event_BombPickup(Handle event, const char[] name, bool dontBroadca
 	if (!g_bChatChange)
 		return;
 	if (g_PointsBombPickup > 0)
-		if(!hidechat[client])	Message(client, "%T", "BombPickup", client, g_aClientName[client], g_aStats[client].SCORE, g_PointsBombPickup);
+		if(!hidechat[client])	Puger_Message(client, "%T", "BombPickup", client, g_aClientName[client], g_aStats[client].SCORE, g_PointsBombPickup);
 	
 }
 
@@ -950,7 +949,7 @@ public Action Event_BombDropped(Handle event, const char[] name, bool dontBroadc
 	if (!g_bChatChange)
 		return;
 	if (g_PointsBombDropped > 0 && client == 0)
-		if(!hidechat[client])	Message(client, "%T", "BombDropped", client, g_aClientName[client], g_aStats[client].SCORE, g_PointsBombDropped);
+		if(!hidechat[client])	Puger_Message(client, "%T", "BombDropped", client, g_aClientName[client], g_aStats[client].SCORE, g_PointsBombDropped);
 	
 }
 
@@ -988,7 +987,7 @@ public Action EventPlayerDeath(Handle event, const char [] name, bool dontBroadc
 		}
 		
 		if (g_PointsLoseSuicide > 0 && g_bChatChange) {
-			if(!hidechat[victim])	Message(victim, "%T", "LostSuicide", victim, g_aClientName[victim], g_aStats[victim].SCORE, g_PointsLoseSuicide);
+			if(!hidechat[victim])	Puger_Message(victim, "%T", "LostSuicide", victim, g_aClientName[victim], g_aStats[victim].SCORE, g_PointsLoseSuicide);
 		}
 		
 	} 
@@ -1010,8 +1009,8 @@ public Action EventPlayerDeath(Handle event, const char [] name, bool dontBroadc
 			}
 		
 			if (g_PointsLoseTk > 0 && g_bChatChange) {
-				if(!hidechat[victim])	Message(victim, "%T", "LostTK", victim, g_aClientName[attacker], g_aStats[attacker].SCORE, g_PointsLoseTk, g_aClientName[victim]);
-				if(!hidechat[attacker])	Message(attacker, "%T", "LostTK", attacker, g_aClientName[attacker], g_aStats[attacker].SCORE, g_PointsLoseTk, g_aClientName[victim]);
+				if(!hidechat[victim])	Puger_Message(victim, "%T", "LostTK", victim, g_aClientName[attacker], g_aStats[attacker].SCORE, g_PointsLoseTk, g_aClientName[victim]);
+				if(!hidechat[attacker])	Puger_Message(attacker, "%T", "LostTK", attacker, g_aClientName[attacker], g_aStats[attacker].SCORE, g_PointsLoseTk, g_aClientName[victim]);
 			}
 		}
 	} 
@@ -1108,34 +1107,34 @@ public Action EventPlayerDeath(Handle event, const char [] name, bool dontBroadc
 				//PrintToServer("%T", "Killing",g_aClientName[attacker],g_aStats[attacker].SCORE,score_dif,g_aClientName[victim],g_aStats[victim].SCORE);
 				if(!hidechat[victim])	
 				{
-					Message(victim, "%T", "Killing", victim, g_aClientName[attacker], g_aStats[attacker].SCORE, score_dif, g_aClientName[victim], g_aStats[victim].SCORE);
+					Puger_Message(victim, "%T", "Killing", victim, g_aClientName[attacker], g_aStats[attacker].SCORE, score_dif, g_aClientName[victim], g_aStats[victim].SCORE);
 				}
 				if (attacker < MAXPLAYERS)
 				{
 					if(!hidechat[attacker])
 					{
-						Message(attacker, "%T", "Killing", attacker, g_aClientName[attacker], g_aStats[attacker].SCORE, score_dif, g_aClientName[victim], g_aStats[victim].SCORE);
+						Puger_Message(attacker, "%T", "Killing", attacker, g_aClientName[attacker], g_aStats[attacker].SCORE, score_dif, g_aClientName[victim], g_aStats[victim].SCORE);
 					}
 				}
 			}
 		} else {
 			if (g_aStats[victim].KILLS < g_MinimalKills && g_aStats[attacker].KILLS < g_MinimalKills) {
 				if (g_bChatChange) {
-					if(!hidechat[victim])	Message(victim, "%T", "KillingBothNotRanked", victim, g_aClientName[attacker], g_aStats[attacker].SCORE, score_dif, g_aClientName[victim], g_aStats[victim].SCORE, g_aStats[attacker].KILLS, g_MinimalKills, g_aStats[victim].KILLS, g_MinimalKills);
+					if(!hidechat[victim])	Puger_Message(victim, "%T", "KillingBothNotRanked", victim, g_aClientName[attacker], g_aStats[attacker].SCORE, score_dif, g_aClientName[victim], g_aStats[victim].SCORE, g_aStats[attacker].KILLS, g_MinimalKills, g_aStats[victim].KILLS, g_MinimalKills);
 					if (attacker < MAXPLAYERS)
-						if(!hidechat[attacker])	Message(attacker, "%T", "KillingBothNotRanked", attacker, g_aClientName[attacker], g_aStats[attacker].SCORE, score_dif, g_aClientName[victim], g_aStats[victim].SCORE, g_aStats[attacker].KILLS, g_MinimalKills, g_aStats[victim].KILLS, g_MinimalKills);
+						if(!hidechat[attacker])	Puger_Message(attacker, "%T", "KillingBothNotRanked", attacker, g_aClientName[attacker], g_aStats[attacker].SCORE, score_dif, g_aClientName[victim], g_aStats[victim].SCORE, g_aStats[attacker].KILLS, g_MinimalKills, g_aStats[victim].KILLS, g_MinimalKills);
 				}
 			} else if (g_aStats[victim].KILLS < g_MinimalKills) {
 				if (g_bChatChange) {
-					if(!hidechat[victim])	Message(victim, "%T", "KillingVictimNotRanked", victim, g_aClientName[attacker], g_aStats[attacker].SCORE, score_dif, g_aClientName[victim], g_aStats[victim].SCORE, g_aStats[victim].KILLS, g_MinimalKills);
+					if(!hidechat[victim])	Puger_Message(victim, "%T", "KillingVictimNotRanked", victim, g_aClientName[attacker], g_aStats[attacker].SCORE, score_dif, g_aClientName[victim], g_aStats[victim].SCORE, g_aStats[victim].KILLS, g_MinimalKills);
 					if (attacker < MAXPLAYERS)
-						if(!hidechat[victim])	Message(victim, "%T", "KillingVictimNotRanked", victim, g_aClientName[attacker], g_aStats[attacker].SCORE, score_dif, g_aClientName[victim], g_aStats[victim].SCORE, g_aStats[victim].KILLS, g_MinimalKills);
+						if(!hidechat[victim])	Puger_Message(victim, "%T", "KillingVictimNotRanked", victim, g_aClientName[attacker], g_aStats[attacker].SCORE, score_dif, g_aClientName[victim], g_aStats[victim].SCORE, g_aStats[victim].KILLS, g_MinimalKills);
 				}
 			} else {
 				if (g_bChatChange) {
-					if(!hidechat[victim])	Message(victim, "%T", "KillingKillerNotRanked", victim, g_aClientName[attacker], g_aStats[attacker].SCORE, score_dif, g_aClientName[victim], g_aStats[victim].SCORE, g_aStats[attacker].KILLS, g_MinimalKills);
+					if(!hidechat[victim])	Puger_Message(victim, "%T", "KillingKillerNotRanked", victim, g_aClientName[attacker], g_aStats[attacker].SCORE, score_dif, g_aClientName[victim], g_aStats[victim].SCORE, g_aStats[attacker].KILLS, g_MinimalKills);
 					if (attacker < MAXPLAYERS)
-						if(!hidechat[attacker])	Message(attacker, "%T", "KillingKillerNotRanked", attacker, g_aClientName[attacker], g_aStats[attacker].SCORE, score_dif, g_aClientName[victim], g_aStats[victim].SCORE, g_aStats[attacker].KILLS, g_MinimalKills);
+						if(!hidechat[attacker])	Puger_Message(attacker, "%T", "KillingKillerNotRanked", attacker, g_aClientName[attacker], g_aStats[attacker].SCORE, score_dif, g_aClientName[victim], g_aStats[victim].SCORE, g_aStats[attacker].KILLS, g_MinimalKills);
 				}
 			}
 		}
@@ -1147,7 +1146,7 @@ public Action EventPlayerDeath(Handle event, const char [] name, bool dontBroadc
 			g_aStats[attacker].SCORE += g_PointsHs;
 			g_aSession[attacker].SCORE += g_PointsHs;
 			if (g_bChatChange && g_PointsHs > 0)
-				if(!hidechat[attacker])	Message(attacker, "%T", "Headshot", attacker, g_aClientName[attacker], g_aStats[attacker].SCORE, g_PointsHs);
+				if(!hidechat[attacker])	Puger_Message(attacker, "%T", "Headshot", attacker, g_aClientName[attacker], g_aStats[attacker].SCORE, g_PointsHs);
 		}
 
 		if (attackerblind) {
@@ -1156,7 +1155,7 @@ public Action EventPlayerDeath(Handle event, const char [] name, bool dontBroadc
 			g_aStats[attacker].SCORE += g_PointsBlind;
 			g_aSession[attacker].SCORE += g_PointsBlind;
 			if (g_bChatChange && g_PointsBlind > 0)
-				if(!hidechat[attacker])	Message(attacker, "%T", "Flashed Kill", attacker, g_aClientName[attacker], g_aStats[attacker].SCORE, g_PointsBlind);
+				if(!hidechat[attacker])	Puger_Message(attacker, "%T", "Flashed Kill", attacker, g_aClientName[attacker], g_aStats[attacker].SCORE, g_PointsBlind);
 		}
 
 		if (thrusmoke) {
@@ -1165,7 +1164,7 @@ public Action EventPlayerDeath(Handle event, const char [] name, bool dontBroadc
 			g_aStats[attacker].SCORE += g_PointsSmoke;
 			g_aSession[attacker].SCORE += g_PointsSmoke;
 			if (g_bChatChange && g_PointsSmoke > 0)
-				if(!hidechat[attacker])	Message(attacker, "%T", "Thru Smoke", attacker, g_aClientName[attacker], g_aStats[attacker].SCORE, g_PointsSmoke);
+				if(!hidechat[attacker])	Puger_Message(attacker, "%T", "Thru Smoke", attacker, g_aClientName[attacker], g_aStats[attacker].SCORE, g_PointsSmoke);
 		}
 
 		if(penetrated > 0) {
@@ -1174,7 +1173,7 @@ public Action EventPlayerDeath(Handle event, const char [] name, bool dontBroadc
 			g_aStats[attacker].SCORE += g_PointsWall;
 			g_aSession[attacker].SCORE += g_PointsWall;
 			if (g_bChatChange && g_PointsWall > 0)
-				if(!hidechat[attacker])	Message(attacker, "%T", "Wallbang", attacker, g_aClientName[attacker], g_aStats[attacker].SCORE, g_PointsSmoke);
+				if(!hidechat[attacker])	Puger_Message(attacker, "%T", "Wallbang", attacker, g_aClientName[attacker], g_aStats[attacker].SCORE, g_PointsSmoke);
 		}
 
 		/* First blood */
@@ -1186,7 +1185,7 @@ public Action EventPlayerDeath(Handle event, const char [] name, bool dontBroadc
 			g_aStats[attacker].FB ++;
 			g_aSession[attacker].FB ++;
 			if (g_bChatChange && g_PointsFb > 0)
-				if(!hidechat[attacker])	Message(attacker, "%T", "First Blood", attacker, g_aClientName[attacker], g_aStats[attacker].SCORE, g_PointsFb);
+				if(!hidechat[attacker])	Puger_Message(attacker, "%T", "First Blood", attacker, g_aClientName[attacker], g_aStats[attacker].SCORE, g_PointsFb);
 		}
 		
 		/* No scope */
@@ -1207,7 +1206,7 @@ public Action EventPlayerDeath(Handle event, const char [] name, bool dontBroadc
 			if(g_bChatChange && g_PointsNS > 0){
 				if(!hidechat[attacker])	
 				{
-					Message(attacker, "%T", "No Scope", attacker, g_aClientName[attacker], g_aStats[attacker].SCORE, g_PointsNS, g_aClientName[victim], weapon, fNSD);
+					Puger_Message(attacker, "%T", "No Scope", attacker, g_aClientName[attacker], g_aStats[attacker].SCORE, g_PointsNS, g_aClientName[victim], weapon, fNSD);
 				}
 			}
 		}
@@ -1228,7 +1227,7 @@ public Action EventPlayerDeath(Handle event, const char [] name, bool dontBroadc
 				g_aSession[assist].ATF++;
 
 				if(g_bChatChange && g_PointsAssistKill > 0){
-					if(!hidechat[assist])	Message(assist, "%T", "AssistTeamFlash", assist, g_aClientName[assist], g_aStats[assist].SCORE, g_PointsAssistTeamFlash, g_aClientName[attacker], g_aClientName[victim]);
+					if(!hidechat[assist])	Puger_Message(assist, "%T", "AssistTeamFlash", assist, g_aClientName[assist], g_aStats[assist].SCORE, g_PointsAssistTeamFlash, g_aClientName[attacker], g_aClientName[victim]);
 				}
 			}
 			else {
@@ -1238,7 +1237,7 @@ public Action EventPlayerDeath(Handle event, const char [] name, bool dontBroadc
 				g_aSession[assist].ATK++;
 
 				if(g_bChatChange && g_PointsAssistKill > 0){
-					if(!hidechat[assist])	Message(assist, "%T", "AssistTeamKill", assist, g_aClientName[assist], g_aStats[assist].SCORE, g_PointsLoseATk, g_aClientName[attacker], g_aClientName[victim]);
+					if(!hidechat[assist])	Puger_Message(assist, "%T", "AssistTeamKill", assist, g_aClientName[assist], g_aStats[assist].SCORE, g_PointsLoseATk, g_aClientName[attacker], g_aClientName[victim]);
 				}
 			}
 		}
@@ -1252,7 +1251,7 @@ public Action EventPlayerDeath(Handle event, const char [] name, bool dontBroadc
 				g_aSession[assist].AF++;
 
 				if(g_bChatChange && g_PointsAssistKill > 0){
-					if(!hidechat[assist])	Message(assist, "%T", "AssistFlash", assist, g_aClientName[assist], g_aStats[assist].SCORE, g_PointsAssistFlash, g_aClientName[attacker], g_aClientName[victim]);
+					if(!hidechat[assist])	Puger_Message(assist, "%T", "AssistFlash", assist, g_aClientName[assist], g_aStats[assist].SCORE, g_PointsAssistFlash, g_aClientName[attacker], g_aClientName[victim]);
 				}
 			}
 			else {
@@ -1262,7 +1261,7 @@ public Action EventPlayerDeath(Handle event, const char [] name, bool dontBroadc
 				g_aSession[assist].ASSISTS++;
 				
 				if(g_bChatChange && g_PointsAssistKill > 0){
-					if(!hidechat[assist])	Message(assist, "%T", "AssistKill", assist, g_aClientName[assist], g_aStats[assist].SCORE, g_PointsAssistKill, g_aClientName[attacker], g_aClientName[victim]);
+					if(!hidechat[assist])	Puger_Message(assist, "%T", "AssistKill", assist, g_aClientName[assist], g_aStats[assist].SCORE, g_PointsAssistKill, g_aClientName[attacker], g_aClientName[victim]);
 				}
 			}
 		}
@@ -1862,7 +1861,7 @@ public Action RankConnectCallback(int client, int rank, any data)
 	{
 		if(g_bAnnounceConnect){
 			if(g_bAnnounceConnectChat){
-				MessageToAll("%t", "PlayerJoinedChat",sClientName,g_aRankOnConnect[client],g_aPointsOnConnect[client],s_Country);
+				Puger_MessageToAll("%t", "PlayerJoinedChat",sClientName,g_aRankOnConnect[client],g_aPointsOnConnect[client],s_Country);
 			}
 			
 			if(g_bAnnounceConnectHint){
@@ -1873,7 +1872,7 @@ public Action RankConnectCallback(int client, int rank, any data)
 		if(g_bAnnounceTopConnect && rank <= g_AnnounceTopPosConnect){
 			
 			if(g_bAnnounceTopConnectChat){	
-				MessageToAll("%t", "TopPlayerJoinedChat",g_AnnounceTopPosConnect,sClientName,g_aRankOnConnect[client],s_Country);			
+				Puger_MessageToAll("%t", "TopPlayerJoinedChat",g_AnnounceTopPosConnect,sClientName,g_aRankOnConnect[client],s_Country);			
 			}
 			
 			if(g_bAnnounceTopConnectHint){
@@ -1904,7 +1903,7 @@ public Action Event_PlayerDisconnect(Handle event, const char[] name, bool dontB
 	char disconnectReason[64];
 	GetEventString(event, "reason", disconnectReason, sizeof(disconnectReason));
 	
-	MessageToAll("%t", "PlayerLeft",g_sBufferClientName[client], g_aPointsOnDisconnect[client], disconnectReason);
+	Puger_MessageToAll("%t", "PlayerLeft",g_sBufferClientName[client], g_aPointsOnDisconnect[client], disconnectReason);
 }
 
 /* Enable Or Disable Points In Warmup */
@@ -1926,7 +1925,7 @@ public void OnGameFrame()
 	// 	}
 	// }
 	
-	if(Pugsetup_IsMatchLive())
+	if(Puger_IsMatchLive())
 	{
 		g_bGatherStats = true;
 	}
@@ -1945,8 +1944,8 @@ public Action Event_WinPanelMatch(Handle event, const char[] name, bool dontBroa
 			{
 				if(!hidechat[i])
 				{
-					Message(i, "%T", "CT_Win", i, g_PointsMatchWin);
-					Message(i, "%T", "TR_Lose", i, g_PointsMatchLose);
+					Puger_Message(i, "%T", "CT_Win", i, g_PointsMatchWin);
+					Puger_Message(i, "%T", "TR_Lose", i, g_PointsMatchLose);
 				}
 				
 				if(GetClientTeam(i) == TR)
@@ -1985,7 +1984,7 @@ public Action Event_WinPanelMatch(Handle event, const char[] name, bool dontBroa
 				g_aStats[i].SCORE += g_PointsMatchDraw;
 				g_aSession[i].SCORE += g_PointsMatchDraw;
 				
-				if(!hidechat[i])	Message(i, "%T", "Draw", i, g_PointsMatchDraw);
+				if(!hidechat[i])	Puger_Message(i, "%T", "Draw", i, g_PointsMatchDraw);
 			}
 		}
 	}
@@ -1998,8 +1997,8 @@ public Action Event_WinPanelMatch(Handle event, const char[] name, bool dontBroa
 			{
 				if(!hidechat[i])
 				{
-					Message(i, "%T", "TR_Win", i, g_PointsMatchWin);
-					Message(i, "%T", "CT_Lose", i, g_PointsMatchLose);
+					Puger_Message(i, "%T", "TR_Win", i, g_PointsMatchWin);
+					Puger_Message(i, "%T", "CT_Lose", i, g_PointsMatchLose);
 				}
 				
 				if(GetClientTeam(i) == TR)
